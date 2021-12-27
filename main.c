@@ -148,11 +148,65 @@ void insertNode(int value, struct linkedList *linkedList, int position) {
         return;  // exit function
     }
 
+    // link new node and previous node
     (currNode->prevNode)->nextNode = nodePtr;
     nodePtr->prevNode = currNode->prevNode;
 
+    // link new node and current node
     nodePtr->nextNode = currNode;
     currNode->prevNode = nodePtr;
+}
+
+void removeNodeByValue(int value, struct linkedList *linkedList) {
+    struct node *currNode = linkedList->head;
+
+    // check if first occurence of value is the value of the head node
+    if (value == currNode->value) {
+        // set next node as the head
+        linkedList->head = (linkedList->head)->nextNode;
+        (linkedList->head)->prevNode = NULL;
+
+        // delete previous head node from memory
+        free(currNode);
+        currNode = NULL;
+
+        return;  // exit the function
+    }
+
+    // iterate through the linked list until there are no more values or
+    // until the current node's value equals the specified value
+    while (currNode && value != currNode->value) {
+        currNode = currNode->nextNode;
+    }
+
+    // if currNode is NULL then the value was not found in the linked list
+    if (!currNode) {
+        return;  // exit the function
+    }
+
+    // check if currNode is the tail node
+    if (currNode == linkedList->tail) {
+        // set tail's previous node's next node pointer to NULL
+        (currNode->prevNode)->nextNode = NULL;
+        
+        // set tail's previous node as the new tail
+        linkedList->tail = currNode->prevNode;
+
+        // delete the previous tail node from memory
+        free(currNode);
+        currNode = NULL;
+
+        return;  // exit the function
+    }
+
+    // link currNode's previous node and next node to remove currNode from
+    // the linked list
+    (currNode->prevNode)->nextNode = currNode->nextNode;
+    (currNode->nextNode)->prevNode = currNode->prevNode;
+
+    // delete currNode from memory
+    free(currNode);
+    currNode = NULL;
 }
 
 /**
@@ -163,6 +217,7 @@ void insertNode(int value, struct linkedList *linkedList, int position) {
 int main(void) {
     struct linkedList linkedList = {.head=NULL, .tail=NULL};
 
+    // initialize linked list
     initLinkedList(10, &linkedList);
     printLinkedListForward(&linkedList);
 
@@ -181,6 +236,18 @@ int main(void) {
     printLinkedListForward(&linkedList);
 
     insertNode(103, &linkedList, 12);
+    printLinkedListForward(&linkedList);
+
+    removeNodeByValue(5, &linkedList);
+    printLinkedListForward(&linkedList);
+
+    removeNodeByValue(45, &linkedList);
+    printLinkedListForward(&linkedList);
+
+    removeNodeByValue(105, &linkedList);
+    printLinkedListForward(&linkedList);
+
+    removeNodeByValue(45, &linkedList);
     printLinkedListForward(&linkedList);
 
     return 0;
