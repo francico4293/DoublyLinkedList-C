@@ -104,7 +104,8 @@ void addNode(int value, struct linkedList *linkedList) {
  * @brief Inserts a new node into the linked list at a specified position
  * 
  * @param value The value of the new node to be inserted
- * @param linkedList 
+ * @param linkedList A pointer to a linked list struct containing pointers
+ * to head and tail nodes
  * @param position The position to insert the node at
  */
 void insertNode(int value, struct linkedList *linkedList, int position) {
@@ -157,6 +158,13 @@ void insertNode(int value, struct linkedList *linkedList, int position) {
     currNode->prevNode = nodePtr;
 }
 
+/**
+ * @brief Removes the first node found whose value matches the specified value
+ * 
+ * @param value The value of the node to remove
+ * @param linkedList A pointer to a linked list struct containing pointers
+ * to head and tail nodes
+ */
 void removeNodeByValue(int value, struct linkedList *linkedList) {
     struct node *currNode = linkedList->head;
 
