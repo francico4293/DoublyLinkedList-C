@@ -147,6 +147,12 @@ void insertNode(int value, struct linkedList *linkedList, int position) {
 
         return;  // exit function
     }
+
+    (currNode->prevNode)->nextNode = nodePtr;
+    nodePtr->prevNode = currNode->prevNode;
+
+    nodePtr->nextNode = currNode;
+    currNode->prevNode = nodePtr;
 }
 
 /**
@@ -168,7 +174,13 @@ int main(void) {
     insertNode(5, &linkedList, 0);
     printLinkedListForward(&linkedList);
 
-    insertNode(105, &linkedList, 10);
+    insertNode(105, &linkedList, 11);
+    printLinkedListForward(&linkedList);
+
+    insertNode(45, &linkedList, 5);
+    printLinkedListForward(&linkedList);
+
+    insertNode(103, &linkedList, 12);
     printLinkedListForward(&linkedList);
 
     return 0;
