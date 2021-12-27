@@ -218,6 +218,57 @@ void removeNodeByValue(int value, struct linkedList *linkedList) {
 }
 
 /**
+ * @brief Removes a node from the linked list based on a specified position
+ * 
+ * @param position The position of the node to remove
+ * @param linkedList A pointer to a linked list struct containing pointers
+ * to head and tail nodes
+ */
+void removeNodeByPosition(int position, struct linkedList *linkedList) {
+    int currPosition = 0;
+    struct node *currNode = linkedList->head;
+
+    // specified position is zero, remove head
+    if (position == 0) {
+        linkedList->head = (linkedList->head)->nextNode;
+        (linkedList->head)->prevNode = NULL;
+
+        free(currNode);
+        currNode = NULL;
+
+        return;  // exit function
+    }
+
+    while (currNode && currPosition != position) {
+        currNode = currNode->nextNode;
+        currPosition++;
+    }
+
+    // specified position is outside of linked list
+    if (!currNode) {
+        return;  // exit function
+    }
+
+    // specified position is tail
+    if (currNode == linkedList->tail) {
+        ((linkedList->tail)->prevNode)->nextNode = NULL;
+
+        linkedList->tail = (linkedList->tail)->prevNode;
+
+        free(currNode);
+        currNode = NULL;
+
+        return;  // exit function
+    }
+
+    (currNode->prevNode)->nextNode = currNode->nextNode;
+    (currNode->nextNode)->prevNode = currNode->prevNode;
+
+    free(currNode);
+    currNode = NULL;
+}
+
+/**
  * @brief Driver code for doubly linked list implementation
  * 
  * @return int 
@@ -256,6 +307,15 @@ int main(void) {
     printLinkedListForward(&linkedList);
 
     removeNodeByValue(45, &linkedList);
+    printLinkedListForward(&linkedList);
+
+    removeNodeByPosition(0, &linkedList);
+    printLinkedListForward(&linkedList);
+
+    removeNodeByPosition(9, &linkedList);
+    printLinkedListForward(&linkedList);
+
+    removeNodeByPosition(4, &linkedList);
     printLinkedListForward(&linkedList);
 
     return 0;
