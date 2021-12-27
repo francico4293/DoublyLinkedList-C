@@ -90,7 +90,7 @@ void addNode(int value, struct linkedList *linkedList) {
     // create a new struct node
     struct node node = {.value=value, .prevNode=NULL, .nextNode=NULL};
 
-    *nodePtr = node;  // stroe new struct node on heap 
+    *nodePtr = node;  // store new struct node on heap 
 
     // link current tail node and new node
     (linkedList->tail)->nextNode = nodePtr;
@@ -100,19 +100,52 @@ void addNode(int value, struct linkedList *linkedList) {
     linkedList->tail = nodePtr;
 }
 
+/**
+ * @brief Inserts a new node into the linked list at a specified position
+ * 
+ * @param value The value of the new node to be inserted
+ * @param linkedList 
+ * @param position The position to insert the node at
+ */
 void insertNode(int value, struct linkedList *linkedList, int position) {
-    int currPosition = 0;
+    int currPosition = 0;  // declare and init current position to zero
+    // allocate memory on heap for new struct node
     struct node *nodePtr = (struct node*) malloc(sizeof(struct node));
+    // create a new struct node
     struct node node = {.value=value, .prevNode=NULL, .nextNode=NULL};
+    struct node *currNode = linkedList->head;
 
-    *nodePtr = node;
+    *nodePtr = node; // store new struct node on heap 
 
     // if specified position is zero, new node will be the new head
     if (position == 0) {
+        // link current head node and new node
         nodePtr->nextNode = linkedList->head;
         (linkedList->head)->prevNode = nodePtr;
+
+        // set new node to be the new head node
         linkedList->head = nodePtr;
-        return;
+
+        return;  // exit function
+    }
+
+    // traverse linked list until there are no more nodes or until the current
+    // position is equal to the target position
+    while (currNode && currPosition != position) {
+        currNode = currNode->nextNode;
+        currPosition++;
+    }
+
+    // if currNode is NULL, insert node at the end of the linked list
+    if (!currNode) {
+        // link current tail node and new node
+        (linkedList->tail)->nextNode = nodePtr;
+        nodePtr->prevNode = linkedList->tail;
+
+        // set new node to the new tail node
+        linkedList->tail = nodePtr;
+
+        return;  // exit function
     }
 }
 
@@ -133,6 +166,9 @@ int main(void) {
     printLinkedListForward(&linkedList);
 
     insertNode(5, &linkedList, 0);
+    printLinkedListForward(&linkedList);
+
+    insertNode(105, &linkedList, 10);
     printLinkedListForward(&linkedList);
 
     return 0;
