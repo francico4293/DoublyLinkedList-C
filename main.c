@@ -48,7 +48,7 @@ void printLinkedListForward(struct linkedList *linkedList) {
     // iterate through linked list until the last node is found
     while (currNode && currNode->nextNode) {
         // display each linked list node value
-        printf("%d - ", currNode->value);
+        printf("%d <-> ", currNode->value);
         // point to next node in linked list
         currNode = currNode->nextNode;
     }
@@ -100,6 +100,22 @@ void addNode(int value, struct linkedList *linkedList) {
     linkedList->tail = nodePtr;
 }
 
+void insertNode(int value, struct linkedList *linkedList, int position) {
+    int currPosition = 0;
+    struct node *nodePtr = (struct node*) malloc(sizeof(struct node));
+    struct node node = {.value=value, .prevNode=NULL, .nextNode=NULL};
+
+    *nodePtr = node;
+
+    // if specified position is zero, new node will be the new head
+    if (position == 0) {
+        nodePtr->nextNode = linkedList->head;
+        (linkedList->head)->prevNode = nodePtr;
+        linkedList->head = nodePtr;
+        return;
+    }
+}
+
 /**
  * @brief Driver code for doubly linked list implementation
  * 
@@ -114,6 +130,9 @@ int main(void) {
     for (int value = 2; value < 11; value++) {
         addNode(value * 10, &linkedList);
     }
+    printLinkedListForward(&linkedList);
+
+    insertNode(5, &linkedList, 0);
     printLinkedListForward(&linkedList);
 
     return 0;
